@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <title>Whist-Point.dk | Beregn point når du spiller whist</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
+  <script src="whist-point.js"></script>
+
+  <style>
+    body,h1,h2,h3,h4,h5 {font-family: "Poppins", sans-serif}
+    body {font-size:16px;}
+    .w3-half img{margin-bottom:-6px;margin-top:16px;opacity:0.8;cursor:pointer}
+    .w3-half img:hover{opacity:1}
+    .hidden {position:absolute; left:-10000px; top:auto; width:1px; height:1px; overflow:hidden;}
+  </style>
+</head>
+<body>
+
+<!-- Sidebar/menu -->
+<nav class="w3-sidebar w3-red w3-collapse w3-top w3-large w3-padding" style="z-index:3;width:300px;font-weight:bold;" id="mySidebar"><br>
+  <a href="javascript:void(0)" onclick="w3_close_nav()" class="w3-button w3-hide-large w3-display-topleft" style="width:100%;font-size:22px">Luk menu</a>
+  <div class="w3-container">
+    <h3 class="w3-padding-64"><b>Whist-Point.dk</b></h3>
+  </div>
+  <div class="w3-bar-block">
+    <a href="#" onclick="w3_close_nav()" class="w3-bar-item w3-button w3-hover-white">Til top</a> 
+    <a href="#om-whistpointdk" onclick="w3_close_nav()" class="w3-bar-item w3-button w3-hover-white">Om Whist-Point.dk</a> 
+    <a href="#om-whist" onclick="w3_close_nav()" class="w3-bar-item w3-button w3-hover-white">Om whist</a> 
+  </div>
+</nav>
+
+<!-- Top menu on small screens -->
+<header class="w3-container w3-top w3-hide-large w3-red w3-xlarge w3-padding">
+  <a href="javascript:void(0)" class="w3-button w3-red w3-margin-right" onclick="w3_open('mySidebar'); w3_open('myOverlay');">&#9776;</a>
+  <span>Whist-Point.dk</span>
+</header>
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large" onclick="w3_close_nav()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin-left:340px;margin-right:40px">
+
+  <!-- Samlet div til spil -->
+  <div class="w3-container" style="margin-top: 80px" id="spil">
+    <h1 class="w3-jumbo"><b>Whist-Point.dk</b></h1>
+
+    <!-- Vælg  -->
+    <div id="spil.vaelg" style="display:none">
+      <button class="w3-button w3-round w3-red" onclick="vis_div('spil.nyt_spil')">Nyt spil</button>
+      <p>eller</p>
+      <button class="w3-button w3-round w3-red" onclick="gammelt_spil()">Find tidligere spil</button>
+    </div>
+
+    <!-- Nyt spil -->
+    <div id="spil.nyt_spil" style="display:none">
+      <p><i><a href="javascript:void(0)" onclick="vis_div('spil.vaelg')">Tilbage.</i></a></p>
+
+      <h1 class="w3-xxxlarge w3-text-red"><b>Nyt spil.</b></h1>
+      <hr style="width:50px;border:5px solid red" class="w3-round">
+
+      <form>
+        <p><label for="spil.nyt_spil.spil_navn">Giv spillet et navn: </label><br/>
+          <input type="text" id="spil.nyt_spil.spil_navn" required></p>
+
+        <p>Indtast spillernes navne:<br/>
+          <label for="spil.nyt_spil.spiller1_navn" class="hidden">Navn på spiller 1</label>
+          <input type="text" id="spil.nyt_spil.spiller1_navn" placeholder="Spiller 1" required> </p>
+        
+        <p>
+          <label for="spil.nyt_spil.spiller2_navn" class="hidden">Navn på spiller 2</label>
+          <input type="text" id="spil.nyt_spil.spiller2_navn" placeholder="Spiller 2" required> </p>
+
+        <p>
+          <label for="spil.nyt_spil.spiller3_navn" class="hidden">Navn på spiller 3</label>
+          <input type="text" id="spil.nyt_spil.spiller3_navn" placeholder="Spiller 3" required> </p>
+
+        <p>
+          <label for="spil.nyt_spil.spiller4_navn" class="hidden">Navn på spiller 4</label>
+          <input type="text" id="spil.nyt_spil.spiller4_navn" placeholder="Spiller 4" required> </p>
+
+        <p><label for="spil.nyt_spil.grundtakst">Grundtakst:</label> <br/>
+        <input type="number" id="spil.nyt_spil.grundtakst" name="grundtakst" min=1 value=10 required> <br/>
+        (Hvis du ikke ved, hvad du skal sætte grundtaksten til, så lad den blive på 10.) </p>
+
+        <div id="spil.nyt_spil.err" class="w3-panel w3-pale-red w3-leftbar w3-border-red" style="display:none"></div>
+
+        <p>
+        <input type="button" onclick="nyt_spil()" value="Start nyt spil" class="w3-button w3-round w3-red">
+        </p>
+      </form>
+    </div>
+
+    <!-- Gammelt spil -->
+    <div id="spil.gammelt_spil" style="display:none">
+      <p><i><a href="javascript:void(0)" onclick="vis_div('spil.vaelg')">Tilbage.</i></a></p>
+
+      <h1 class="w3-xxxlarge w3-text-red"><b>Tidligere spil.</b></h1>
+      <hr style="width:50px;border:5px solid red" class="w3-round">
+
+      <div id="spil.gammelt_spil.err" style="display: none">
+        <p>Du har desværre ingen tidligere spil. Øv :(</p>
+        <button class="w3-button w3-round w3-red" onclick="vis_div('spil.nyt_spil')">Start et nyt spil!</button>
+      </div>
+
+      <table id="spil.gammelt_spil.tabel" class="w3-table w3-striped" style="display: none"></table>
+    </div>
+
+    <!-- Spil -->
+    <div id="spil.start_spil" style="display: none">
+      <p><i><a href="javascript:void(0)" onclick="vis_div('spil.vaelg')">Tilbage.</i></a></p>
+
+      <h1 id="spil.start_spil.spilnavn" class="w3-xxxlarge w3-text-red"><b>Spil.</b></h1>
+      <hr style="width:50px;border:5px solid red" class="w3-round">
+
+      <form>
+        <p><label>
+          Vælg antal stik:&nbsp;
+          <select>
+            <option selected></option>
+            <option>7</option>
+            <option>8</option>
+            <option>9</option>
+            <option>Sol</option>
+            <option>10</option>
+            <option>Ren sol</option>
+            <option>11</option>
+            <option>Bordlægger</option>
+            <option>12</option>
+            <option>13</option>
+          </select>
+        </label></p>
+
+        <p>
+          <label> <input type="checkbox" id="spil.start_spil.gode" onchange="gode_sans('spil.start_spil.gode')"> Gode </label> <br/>
+          <label> <input type="checkbox" id="spil.start_spil.sans" onchange="gode_sans('spil.start_spil.sans')"> Sans </label>
+        </p>
+        <p>
+          <label> <input type="checkbox"> Vip </label> <br/>
+          <label> <input type="checkbox"> Halve </label>
+        </p>
+        
+      </form>
+
+    </div>
+  </div>
+
+  <!-- Om whist-point.dk -->
+  <div class="w3-container" id="om-whistpointdk" style="margin-top:75px">
+    <h1 class="w3-xxxlarge w3-text-red"><b>Om Whist-Point.dk.</b></h1>
+    <hr style="width:50px;border:5px solid red" class="w3-round">
+
+    <p>Velkommen til Whist-Point.dk!</p>
+    <p>
+      Du kan bruge denne hjemmeside til at holde styr på point når du spiller firemandswhist. 
+      Opret et nyt spil ovenfor, indtast oplysningerne og så er du i gang!
+    </p>
+    <p>
+      Whist-Point.dk kører kun i din browser - der overføres ingen data til en server. 
+      Spillene gemmes i din browser, så du kan åbne dem senere.
+      Men hvis du bruger en anden browser end din nuværende, kan du ikke se dine tidligere spil.
+    </p>
+    <p>Har du et godt forslag eller vil du af en anden grund i kontakt med mig? Så skriv til mig på (indsæt mail her).</p>
+    <p>Venlige hilsner fra Lasse.</p>
+  </div>
+
+
+  <!-- Om whist -->
+  <div class="w3-container" id="om-whist" style="margin-top:75px">
+    <h1 class="w3-xxxlarge w3-text-red"><b>Om whist.</b></h1>
+    <hr style="width:50px;border:5px solid red" class="w3-round">
+            
+    <p>Esmakker whist er et kortspil for fire spillere og er en udvidelse af den mere klassiske whist. I modsætning til denne spilles der ikke med faste makkerpar. Derimod finder man ens makker ved at spilføreren melder, hvilket es (fx klør es) der skal være makker. Personen der sidder med dette es, bliver så makker - deraf navnet. Som mange andre spil er der mange "husregler" i brug - her er forsøgt at skitsere nogle af de mest gængse regler.</p>
+
+    <p>Man spiller med 55 kort (altså et almindeligt sæt kort med tre jokere). Der deles 13 kort ud til hver spiller og de resterende tre kort er "byttere" og lægges til side i første omgang. Personen der sidder efter kortgiveren, skal nu komme med en melding, som er et antal stik som vedkommende forventer at kunne få med sin makker. Den næste spiller skal så komme med en bedre melding eller melde pas. Hvis man slår meldingen, skal personen med den oprindelige melding have mulighed for at stikke denne melding - der starter altså nu en slags "krig" mellem de to personer. Når en vinder er fundet, går turen videre til den næste spiller, som også har mulighed for at komme med en endnu bedre melding. Hvis der er meldt vip, har de resterende spillere mulighed for at "gå med" på denne melding.</p>
+
+    <div class="w3-panel w3-leftbar w3-border-red">
+    <p><i>Eksempel: Anne, Bertram, Clara og Dennis spiller sammen - Anne har givet kort. Bertram melder 8 vip. Clara melder 9 almindelige, hvorefter Bertram melder 9 vip. Clara melder pas. Dennis melder også pas. Anne vil gerne gå med på 9 vip.</i></p>
+    </div>
+
+    <p>Personen som får meldingen skal vælge trumf og makker-es (lidt afhængig af meldingen - se afsnittet herunder). Vedkommende må så vælge at skifte tre kort ud med "bytterne" som blev tilovers fra kortgivningen. Hvis man vælger at bytte kort, skal man starte med at smide tre af ens egne kort, inden man tager de tre byttere. </p>
+
+    <h2>Meldinger</h2>
+    <p>Når man melder, vælger man et antal stik som man forventer at en selv og makkeren kan få i løbet af spillet. Man kan vælge et antal stik, et antal stik med påhæng eller nogle særlige meldinger.</p>
+
+    <p>Hvis man melder et antal stik, skal man, når man har vundet meldingen, erklære hvilken farve der er trumf og hvilken der er makker-es. De må ikke være samme farve (man må fx ikke vælge at både trumf og makker-es skal være hjerter).</p>
+
+    <p>Man kan også melde et antal stik med påhæng. En sådan melding stikker den "almindelige" melding. Der er fire forskellige påhæng:</p>
+
+    <ul>
+        <li>Gode: Klør er trumf. Man må altså ikke vælge klør som makker-es.</li>
+        <li>Vip: Melderen (og andre der er gået med) starter med at vælge makker-es. Melderen vender den første ”bytter” og man kan så vælge denne farve som bytter. Hvis flere er gået med på en vip, spørges spillerne efter tur om de vil have kortet som trumf. Hvis ingen vil have kortet, vendes det næste kort. Hvis ingen vil have dette, vendes det sidste kort. Den sidste person som skal sige ja eller nej til dette kort, skal tage imod det. Hvis der vendes (og vælges) en joker, er der ingen trumf.</li>
+        <li>Sans: Man spiller uden trumf.</li>
+        <li>Halve: Melderen vælger makker-es. Makkeren giver sig derefter til kende og skal vælge trumf.</li>
+    </ul>
+
+    <p>Alle fire påhæng er lige gode - dvs. for at stikke fx 8 gode skal man op på mindst 9.</p>
+
+    <p>Der findes også tre særlige meldinger. De er alle tre karakteriseret ved at man, i modsætning til de almindelige meldinger, ikke ønsker at få stik. Hvis en spiller melder en af disse meldinger, kan de resterende spillere vælge at "gå med", så der altså er flere spillere med den samme melding samtidig.</p>
+
+    <ul>
+        <li>Sol: Man må højst få ét stik. Sol er bedre end 9 men dårligere end 9 med påhæng.</li>
+        <li>Ren sol: Man må slet ikke få nogen stik. Ren sol er bedre end 10 men dårligere end 10 med påhæng.</li>
+        <li>Bordlægger: Man må ikke få nogen stik. Desuden skal man, efter første udspil, lægge alle sine kort på bordet så de andre spillere kan se hvilke kort man har. Bordlægger er bedre end 11 men dårligere end 11 med påhæng.</li>
+    </ul>
+
+    <p>Der spilles ikke med makkere ved de særlige meldinger.</p>
+
+    <h2>Regnskab</h2>
+    <p>Esmakker whist er et nulsumsspil, dvs. summen af de point der vindes og tabes i en runde, skal altid give 0. Udregningen af point kan nemt blive kompliceret - derfor skal du selvfølgelig bruge denne hjemmeside til at holde styr på dine point.</p>
+
+    <p>Forud for spillet aftaler man en grundtakst, som alt andet beregnes ud fra. Grundtaksten er det antal point man får hvis man melder 7 og får netop 7 stik. Taksten fordobles derefter for hver gang meldingen stiger med 1 og hvis der meldes med påhæng.</p>
+
+    <div class="w3-panel w3-leftbar w3-border-red">
+    <p><i>Eksempel: Grundtaksten er 10. Bertram har meldt 9 vip. Først skal grundtaksten fordobles to gange fordi meldingen er steget med 2 (fra 7 til 9) - taksten er 40 (10*2*2). Fordi der er meldt med påhæng (vip) skal denne takst nu også fordobles til 80.</i></p>
+    </div>
+
+    <p>Hvis man får det antal stik man har meldt ("meldingen går hjem"), skal man gange taksten med forskellen mellem det opnåede antal stik og meldingen og lægge dette til den oprindelige takst. Hvis man ikke får det antal stik man har meldt (”meldingen går ikke hjem”), fordobles taksten for hvert stik man har fået mindre end sin melding.</p>
+
+    <div class="w3-panel w3-leftbar w3-border-red">
+    <p><i>Eksempel: Bertram og hans makker Anne får 11 stik. Derfor skal taksten (80) ganges med 2 (11 opnåede stik - 9 meldte stik = 2) og lægges til den oprindelige takst. Derfor ender taksten med at være på 240 (80*2 + 80). I næste runde melder Dennis også 9 vip men ender med at blive makker med sig selv. Han ender med kun at få 4 stik. Derfor skal taksten nu fordobles fem gange, fordi han fik fem stik mindre end hvad han havde meldt. Derfor bliver taksten 2560 (80*2*2*2*2*2).</i></p>
+    </div>
+
+    <p>Hvis man får enten 12 eller 13 stik, lægges der yderligere en bonus til taksten til sidst. Denne bonus er på 8 gange grundtaksten for 12 stik og 16 gange grundtaksten for 13 stik.</p>
+
+    <p>Hvis meldingen går hjem, fratrækkes taksten fra hver af de andre spillere og fordeles mellem melder og evt. makker. Hvis meldingen derimod ikke går hjem, tildeles taksten til hver af de andre spillere og fratrækkes melder og evt. makker.</p>
+
+    <div class="w3-panel w3-leftbar w3-border-red">
+    <p><i>Eksempel: I det første spil fra før er taksten 240. Da Bertram og Clara vinder, får de hver denne pointsum (i alt 480) og der skal tilsvarende trækkes 480 fra de to tabende spillere - 240 fra hver. Resultatet er nu: Anne +240 point, Bertram +240 point, Clara -240 point, Dennis -240 point. I runden efter er taksten 2560 og fordi Dennis taber skal denne lægges til hver af de spillere som har vundet runden. Da Dennis var makker med sig selv, skal alle de tre andre spillere have denne takst. Derfor skal Dennis miste 7680 point (2560*3). Stillingen er nu: Anne +2800 point, Bertram +2800 point, Clara +2320 point, Dennis -7920 point. Man kan altid tjekke om man har regnet efter - hvis man lægger pointene sammen i stillingen, skal de give 0.</i></p>
+    </div>
+
+    <p>Hvis man har meldt sol, er taksten 15 altid gange grundtaksten. Har man meldt ren sol fordobles dette til 30 gange grundtaksten og ved en bordlægger fordobles endnu en gang til 60 gange grundtaksten. Hvis en af disse meldinger ikke går hjem, fordobles taksterne endnu en gang. Hvis meldingen går hjem, modtager man taksten og de andre spiller mister hver en tredjedel af dette. Hvis meldingen ikke går hjem, mister man taksten og de andre spillere får hver en tredjedel af dette.</p>
+
+    <div class="w3-panel w3-leftbar w3-border-red">
+    <p><i>Eksempel: Clara har meldt sol og hun får kun ét stik - meldingen er derfor gået hjem. Taksten er 150 (med en grundtakst på 10), som Clara derfor modtager. Hver af de andre spillere mister så 50 point.</i></p>
+    </div>
+
+    <h2>Læs mere</h2>
+    <p>Du kan læse mere om whist på disse to sider:</p>
+
+    <ul>
+        <li> <a href="http://www.jeberg.eu/kort/WhistRegler.htm" target="_blank">jeberg.eu - Whist regler</a> </li>
+        <li> <a href="https://da.wikipedia.org/wiki/Whist" target="_blank">Wikipedia - Whist</a> </li>
+    </ul>
+
+  </div>
+ 
+
+<!-- End page content -->
+</div>
+
+<!-- Powered By Container -->
+<div class="w3-light-grey w3-container w3-padding-32" style="margin-top:75px;padding-right:58px">
+  <p class="w3-right">Powered by 
+    <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a>
+     &amp; 
+     <a href="https://www.raspberrypi.org/" target="_blank">Raspberry Pi</a> 
+  </p>
+</div>
+
+</body>
+
+<script>start_side()</script>
+</html>
