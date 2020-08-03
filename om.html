@@ -21,7 +21,7 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
 <!-- Navbar -->
 <div class="w3-top">
   <div class="w3-bar w3-theme w3-top w3-left-align w3-large">
-    <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" onclick="w3_open()"><b>&#9776;</b></a>
+    <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" onclick="w3_open_nav()"><b>&#9776;</b></a>
     <a href="index.html" class="w3-bar-item w3-button w3-theme-l1">WhistPoint.dk</a>
     <a href="om-whist.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Hvad er whist?</a>
     <a href="om.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Om</a>
@@ -30,7 +30,7 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
 
 <!-- Sidebar -->
 <nav class="w3-sidebar w3-bar-block w3-hide-large w3-large w3-theme-l5 w3-animate-right" id="mySidebar" style="right: 0; display: none;">
-  <a href="javascript:void(0)" onclick="w3_close()" class="w3-right w3-button w3-xlarge w3-padding-large w3-hover-black" title="Luk menu">
+  <a href="javascript:void(0)" onclick="w3_close_nav()" class="w3-right w3-button w3-xlarge w3-padding-large w3-hover-black" title="Luk menu">
     <b>&times;</b>
   </a>
   <h4 class="w3-bar-item"><b>Menu</b></h4>
@@ -40,7 +40,7 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
 </nav>
 
 <!-- Overlay effect when opening sidebar on small screens -->
-<div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="Luk menuen" id="myOverlay"></div>
+<div class="w3-overlay w3-hide-large" onclick="w3_close_nav()" style="cursor:pointer" title="Luk menuen" id="myOverlay"></div>
 
 <!-- Main content: shift it to the right by 250 pixels when the sidebar is visible -->
 <div class="w3-main">
@@ -68,7 +68,7 @@ var mySidebar = document.getElementById("mySidebar");
 var overlayBg = document.getElementById("myOverlay");
 
 // Toggle between showing and hiding the sidebar, and add overlay effect
-function w3_open() {
+function w3_open_nav() {
   if (mySidebar.style.display === 'block') {
     mySidebar.style.display = 'none';
     overlayBg.style.display = "none";
@@ -79,7 +79,7 @@ function w3_open() {
 }
 
 // Close the sidebar with the close button
-function w3_close() {
+function w3_close_nav() {
   mySidebar.style.display = "none";
   overlayBg.style.display = "none";
 }
