@@ -136,11 +136,6 @@ function w3_close(element_id) {
     document.getElementById(element_id).style.display = "none";
 }
 
-function w3_close_nav() {
-    w3_close("mySidebar");
-    w3_close("myOverlay");
-}
-
 Number.isInteger = Number.isInteger || function(value) {
     // Polyfill til IE
     return typeof value === 'number' && 
