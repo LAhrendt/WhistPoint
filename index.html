@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="da">
+<head>
 <title>WhistPoint.dk | Beregn point når du spiller whist</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,6 +8,7 @@
 <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-amber.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
 
+<script src="https://kit.fontawesome.com/bc48570f30.js" crossorigin="anonymous"></script>
 <script src="whist-point.js"></script>
 
 <style>
@@ -18,14 +20,18 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
   bottom: 0;
   height: inherit;
 }
+.hidden {position:absolute; left:-10000px; top:auto; width:1px; height:1px; overflow:hidden;}
+
 </style>
+</head>
+
 <body>
 
 <!-- Navbar -->
 <div class="w3-top">
   <div class="w3-bar w3-theme w3-top w3-left-align w3-large">
-    <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" onclick="w3_open_nav()"><b>&#9776;</b></a>
-    <a href="index.html" class="w3-bar-item w3-button w3-theme-l1">WhistPoint.dk</a>
+    <a class="w3-bar-item w3-right w3-hide-large w3-hide-medium w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" onclick="w3_open_nav()"><i class="fas fa-bars"></i></a>
+    <a href="/" class="w3-bar-item w3-button w3-theme-l1">WhistPoint.dk</a>
     <a href="om-whist.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Hvad er whist?</a>
     <a href="om.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Om</a>
   </div>
@@ -33,11 +39,11 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
 
 <!-- Sidebar -->
 <nav class="w3-sidebar w3-bar-block w3-hide-large w3-large w3-theme-l5 w3-animate-right" id="mySidebar" style="right: 0; display: none;">
-  <a href="javascript:void(0)" onclick="w3_close_nav()" class="w3-right w3-button w3-xlarge w3-padding-large w3-hover-black" title="Luk menu">
-    <b>&times;</b>
+  <a href="javascript:void(0)" onclick="w3_close_nav()" class="w3-right w3-xlarge w3-padding-large w3-hover-black" title="Luk menu">
+    <i class="fas fa-times"></i>
   </a>
   <h4 class="w3-bar-item"><b>Menu</b></h4>
-  <a class="w3-bar-item w3-button w3-hover-black" href="index.html">WhistPoint.dk</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="/">WhistPoint.dk</a>
   <a class="w3-bar-item w3-button w3-hover-black" href="om-whist.html">Hvad er whist?</a>
   <a class="w3-bar-item w3-button w3-hover-black" href="om.html">Om</a>
 </nav>
@@ -93,10 +99,15 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
           <p>
             <label for="spil.nyt_spil.spiller4_navn" class="hidden">Navn på spiller 4</label>
             <input type="text" id="spil.nyt_spil.spiller4_navn" placeholder="Spiller 4" required> </p>
+          
+          
+          <a class="w3-button" href="javascript:void(0)" onclick="toggleAvanceret()" id="spil.nyt_spil.avanceret_tekst">Avanceret <i class="fas fa-chevron-down"></i></a>
 
-          <p><label for="spil.nyt_spil.grundtakst">Grundtakst:</label> <br/>
-          <input type="number" id="spil.nyt_spil.grundtakst" name="grundtakst" min=1 value=10 required> <br/>
-          (Hvis du ikke ved, hvad du skal sætte grundtaksten til, så lad den blive på 10.) </p>
+          <div class="w3-hide" id="spil.nyt_spil.avanceret">
+            <p><label for="spil.nyt_spil.grundtakst">Grundtakst: </label>
+              <input type="number" id="spil.nyt_spil.grundtakst" name="grundtakst" min=1 value=10 required> </p>
+          </div>
+          
 
           <div id="spil.nyt_spil.err" class="w3-panel w3-theme-l5 w3-leftbar w3-border-theme" style="display:none"></div>
 
@@ -124,35 +135,77 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
       <div id="spil.start_spil" style="display: none">
         <p><i><a href="javascript:void(0)" onclick="vis_div('spil.vaelg')">Tilbage</i></a></p>
 
-        <h1 class="w3-xxxlarge"><b>Spil</b></h1>
+        <h1 class="w3-xxxlarge" id="spil.start_spil.spilnavn"><b>Spil</b></h1>
 
-        <form>
-          <p><label>
-            Vælg antal stik:&nbsp;
-            <select>
-              <option selected></option>
-              <option>7</option>
-              <option>8</option>
-              <option>9</option>
-              <option>Sol</option>
-              <option>10</option>
-              <option>Ren sol</option>
-              <option>11</option>
-              <option>Bordlægger</option>
-              <option>12</option>
-              <option>13</option>
-            </select>
-          </label></p>
-
-          <p>
-            <label> <input type="checkbox" id="spil.start_spil.gode" onchange="gode_sans('spil.start_spil.gode')"> Gode </label> <br/>
-            <label> <input type="checkbox" id="spil.start_spil.sans" onchange="gode_sans('spil.start_spil.sans')"> Sans </label>
-          </p>
-          <p>
-            <label> <input type="checkbox"> Vip </label> <br/>
-            <label> <input type="checkbox"> Halve </label>
-          </p>
-          
+        <form id="spil.start_spil.input">
+          <table class="w3-table" style="display: none;" id="tester">
+            <tr>
+              <td style="padding-left: 0;"> Melding: </td>
+              <td>
+                <select id="spil.start_spil.melding" onchange="melding()" style="width: 100%;">
+                  <option selected disabled></option>
+                  <option>7</option>
+                  <option>8</option>
+                  <option>9</option>
+                  <option>Sol</option>
+                  <option>10</option>
+                  <option>Ren sol</option>
+                  <option>11</option>
+                  <option>Bordlægger</option>
+                  <option>12</option>
+                  <option>13</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding-left: 0;"> Tillæg: </td>
+              <td>
+                <select id="spil.start_spil.tillæg" onchange="melding()" style="width: 100%;">
+                  <option selected>Ren</option>
+                  <option>Halve</option>
+                  <option>Gode</option>
+                  <option>Sans</option>
+                  <option>Vip</option>
+                </select>
+              </td>
+              <td id="spil.start_spil.tillæg.sans.td" style="visibility: collapse;">
+                <label> <input type="checkbox" id="spil.start_spil.tillæg.sans"> Sans </label>
+              </td>
+              <td id="spil.start_spil.tillæg.gode.td" style="visibility: collapse;">
+                <label> <input type="checkbox" id="spil.start_spil.tillæg.gode"> Gode </label>
+              </td>
+            </tr>
+            <tr style="visibility: collapse;" id="spil.start_spil.tillæg.vip.tr">
+              <td colspan="4">
+                <label> <input type="radio" id="spil.start_spil.tillæg.vip.1" name="vip" checked> 1. vip </label> 
+                <label> <input type="radio" id="spil.start_spil.tillæg.vip.2" name="vip"> 2. vip </label> 
+                <label> <input type="radio" id="spil.start_spil.tillæg.vip.3" name="vip"> 3. vip </label>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding-left: 0;"> Antal stik: </td>
+              <td>
+                <select style="width: 100%;">
+                  <option selected disabled></option>
+                  <option>0</option>
+                  <option>1</option>
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                  <option>5</option>
+                  <option>6</option>
+                  <option>7</option>
+                  <option>8</option>
+                  <option>9</option>
+                  <option>10</option>
+                  <option>11</option>
+                  <option>12</option>
+                  <option>13</option>
+                </select>
+              </td>
+            </tr>
+          </table>
+          <input type="reset">
         </form>
 
       </div>
@@ -185,6 +238,18 @@ function w3_open_nav() {
 function w3_close_nav() {
   mySidebar.style.display = "none";
   overlayBg.style.display = "none";
+}
+
+function toggleAvanceret() {
+  var avanceret = document.getElementById("spil.nyt_spil.avanceret");
+  var tekst = document.getElementById("spil.nyt_spil.avanceret_tekst");
+  if (avanceret.className.indexOf("w3-show") == -1) {
+    avanceret.className += " w3-show";
+    tekst.innerHTML = 'Avanceret <i class="fas fa-chevron-up"></i>';
+  } else { 
+    avanceret.className = avanceret.className.replace(" w3-show", "");
+    tekst.innerHTML = 'Avanceret <i class="fas fa-chevron-down"></i>';
+  }
 }
 </script>
 

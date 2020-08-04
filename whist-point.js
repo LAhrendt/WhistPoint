@@ -69,7 +69,7 @@ function gammelt_spil() {
         w3_open("spil.gammelt_spil.tabel");
         w3_close("spil.gammelt_spil.err");
         var table = document.getElementById("spil.gammelt_spil.tabel");
-        table.innerHTML = "<tr class='w3-red'> <th>Navn på spil</th> <th>Oprettet</th> <th>Sidst spillet</th> </tr>";
+        table.innerHTML = "<tr class='w3-theme'> <th>Navn på spil</th> <th>Oprettet</th> <th>Sidst spillet</th> </tr>";
         for (i=keys.length - 1; i >= 0; --i) {
             var data = JSON.parse(localStorage.getItem(keys[i]));
             var row = table.insertRow(-1);
@@ -96,9 +96,44 @@ function gammelt_spil() {
 
 function start_spil() {
     vis_div("spil.start_spil")
+    document.getElementById("tester").style.display = "block";
 
     var spil = JSON.parse(localStorage.getItem(sessionStorage.current));
     document.getElementById("spil.start_spil.spilnavn").innerHTML = "<b>" + spil.navn + "</b>";
+}
+
+function melding() {
+    var melding = document.getElementById("spil.start_spil.melding");
+    var tillaeg = document.getElementById("spil.start_spil.tillæg");
+
+    
+
+
+    if (melding.value == parseInt(melding.value)) {
+        // Der er tale om en tal-melding.
+        tillaeg.disabled = false;
+
+        if (tillaeg.value == "Vip") {
+            document.getElementById("spil.start_spil.tillæg.vip.tr").style.visibility = "visible";
+        } else {
+            document.getElementById("spil.start_spil.tillæg.vip.tr").style.visibility = "collapse";
+        }
+
+        if (tillaeg.value == "Halve" || tillaeg.value == "Vip") {
+            document.getElementById("spil.start_spil.tillæg.sans.td").style.visibility = "visible";
+            document.getElementById("spil.start_spil.tillæg.gode.td").style.visibility = "visible";
+        } else {
+            document.getElementById("spil.start_spil.tillæg.sans.td").style.visibility = "collapse";
+            document.getElementById("spil.start_spil.tillæg.gode.td").style.visibility = "collapse";
+        }
+
+    } else {
+        // Find ud af, hvilken af de andre meldinger der er tale om.
+        tillaeg.disabled = true;
+        document.getElementById("spil.start_spil.tillæg.sans.td").style.visibility = "collapse";
+        document.getElementById("spil.start_spil.tillæg.gode.td").style.visibility = "collapse";
+        document.getElementById("spil.start_spil.tillæg.vip.tr").style.visibility = "collapse";
+    }
 }
 
 function start_side() {
