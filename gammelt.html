@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="da">
 <head>
-<title>Hvad er whist? | WhistPoint.dk</title>
+<title>WhistPoint.dk | Beregn point når du spiller whist</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -20,6 +20,7 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
     height: inherit;
 }
 .hidden {position:absolute; left:-10000px; top:auto; width:1px; height:1px; overflow:hidden;}
+
 </style>
 </head>
 
@@ -28,7 +29,7 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
 <!-- Navbar -->
 <div class="w3-top">
     <div class="w3-bar w3-theme w3-top w3-left-align w3-large">
-        <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" onclick="w3_open_nav()"><b>&#9776;</b></a>
+        <a class="w3-bar-item w3-right w3-hide-large w3-hide-medium w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" onclick="w3_open_nav()"><i class="fas fa-bars"></i></a>
         <a href="index.html" class="w3-bar-item w3-button w3-theme-l1">WhistPoint.dk</a>
         <a href="om-whist.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Hvad er whist?</a>
         <a href="om.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Om</a>
@@ -37,8 +38,8 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
 
 <!-- Sidebar -->
 <nav class="w3-sidebar w3-bar-block w3-hide-large w3-large w3-theme-l5 w3-animate-right" id="mySidebar" style="right: 0; display: none;">
-    <a href="javascript:void(0)" onclick="w3_close_nav()" class="w3-right w3-button w3-xlarge w3-padding-large w3-hover-black" title="Luk menu">
-        <b>&times;</b>
+    <a href="javascript:void(0)" onclick="w3_close_nav()" class="w3-right w3-xlarge w3-padding-large w3-hover-black" title="Luk menu">
+        <i class="fas fa-times"></i>
     </a>
     <h4 class="w3-bar-item"><b>Menu</b></h4>
     <a class="w3-bar-item w3-button w3-hover-black" href="index.html">WhistPoint.dk</a>
@@ -49,22 +50,23 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
 <!-- Overlay effect when opening sidebar on small screens -->
 <div class="w3-overlay w3-hide-large" onclick="w3_close_nav()" style="cursor:pointer" title="Luk menuen" id="myOverlay"></div>
 
-<!-- Main content: shift it to the right by 250 pixels when the sidebar is visible -->
+<!-- Main content -->
 <div class="w3-main">
-
 <div class="w3-row w3-padding-64">
     <div class="w3-container w3-hide-small w3-col m1 l1"></div>
-    <div class="w3-container w3-col m8 l6">
-        <h1>Test</h1>
+    <div class="w3-container w3-col m8 l6" id="spil">
+        <h1 class="w3-xxxlarge"><b>Tidligere spil</b></h1>
 
+        <div id="err">
+            <p>Du har desværre ingen tidligere spil. Øv :(</p>
+            <a class="w3-button w3-round w3-theme" href="nyt.html">Start et nyt spil!</a>
+        </div>
 
-        <h1>FAQ</h1>
-
-        <h2>Spørgsmål?</h2>
+        <table id="tabel" class="w3-table w3-striped" style="display: none">
+            <tr class='w3-theme'> <th>Navn på spil</th> <th>Oprettet</th> <th>Sidst spillet</th> </tr>
+        </table>
     </div>
 </div>
-
-<!-- END MAIN -->
 </div>
 
 <script>
@@ -88,6 +90,34 @@ function w3_close_nav() {
 
     mySidebar.style.display = "none";
     overlayBg.style.display = "none";
+}
+
+// Find alle keys i localStorage.
+var keys = Object.keys(localStorage).sort();
+if (keys.length > 0) {
+    document.getElementById("tabel").style.display = "block";
+    document.getElementById("err").style.display = "none";
+    var table = document.getElementById("tabel");
+    for (i=keys.length - 1; i >= 0; --i) {
+        var data = JSON.parse(localStorage.getItem(keys[i]));
+        var row = table.insertRow(-1);
+        var cell_navn = row.insertCell(0);
+        var cell_oprettet = row.insertCell(1);
+        var cell_sidstspillet = row.insertCell(2);
+
+        cell_navn.innerHTML = "<a href='spil.html' onclick='sessionStorage.current=" + keys[i] + ";'>" + data.navn + "</a>";
+
+        var d = new Date(data.oprettet);
+        cell_oprettet.innerHTML = d.toLocaleDateString() + " " + d.toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"});
+
+        if (data.sidst_spillet) {
+            var d = new Date(typeof(data.sidst_spillet));
+            cell_sidstspillet.innerHTML = d.toLocaleDateString() + " " + d.toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"});
+        } else {
+            // Sidst spillet er null
+            cell_sidstspillet.innerHTML = "-";
+        }
+    }
 }
 </script>
 

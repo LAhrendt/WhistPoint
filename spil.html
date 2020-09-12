@@ -54,15 +54,78 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
 <div class="w3-row w3-padding-64">
     <div class="w3-container w3-hide-small w3-col m1 l1"></div>
     <div class="w3-container w3-col m8 l6">
-        <h1 class="w3-xxxlarge">WhistPoint.dk</h1>
+        <h1 class="w3-xxxlarge" id="spilnavn"><b>Spil</b></h1>
 
-        <p>Her hjælper vi dig med at holde styr på pointene i dit spil whist.</p>
-        <p>Opret et nyt spil herunder eller find et gammelt.</p>
-        <p>Vi gemmer dine spil direkte i din browser, intet bliver overført til en server.</p>
-
-        <a class="w3-button w3-round w3-theme" href="nyt.html">Nyt spil</a>
-        <p>eller</p>
-        <a class="w3-button w3-round w3-theme" href="gammelt.html">Find tidligere spil</a>
+        <form id="input">
+        <table class="w3-table" style="display: block;" id="tester">
+            <tr>
+            <td style="padding-left: 0;"> Melding: </td>
+            <td>
+                <select id="melding" onchange="melding()" style="width: 100%;">
+                <option selected disabled></option>
+                <option>7</option>
+                <option>8</option>
+                <option>9</option>
+                <option>Sol</option>
+                <option>10</option>
+                <option>Ren sol</option>
+                <option>11</option>
+                <option>Bordlægger</option>
+                <option>12</option>
+                <option>13</option>
+                </select>
+            </td>
+            </tr>
+            <tr>
+            <td style="padding-left: 0;"> Tillæg: </td>
+            <td>
+                <select id="tillæg" onchange="melding()" style="width: 100%;">
+                <option selected>Ren</option>
+                <option>Halve</option>
+                <option>Gode</option>
+                <option>Sans</option>
+                <option>Vip</option>
+                </select>
+            </td>
+            <td id="tillæg.sans.td" style="visibility: collapse;">
+                <label> <input type="checkbox" id="tillæg.sans"> Sans </label>
+            </td>
+            <td id="tillæg.gode.td" style="visibility: collapse;">
+                <label> <input type="checkbox" id="tillæg.gode"> Gode </label>
+            </td>
+            </tr>
+            <tr style="visibility: collapse;" id="tillæg.vip.tr">
+            <td colspan="4">
+                <label> <input type="radio" id="tillæg.vip.1" name="vip" checked> 1. vip </label> 
+                <label> <input type="radio" id="tillæg.vip.2" name="vip"> 2. vip </label> 
+                <label> <input type="radio" id="tillæg.vip.3" name="vip"> 3. vip </label>
+            </td>
+            </tr>
+            <tr>
+            <td style="padding-left: 0;"> Antal stik: </td>
+            <td>
+                <select style="width: 100%;">
+                <option selected disabled></option>
+                <option>0</option>
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+                <option>6</option>
+                <option>7</option>
+                <option>8</option>
+                <option>9</option>
+                <option>10</option>
+                <option>11</option>
+                <option>12</option>
+                <option>13</option>
+                </select>
+            </td>
+            </tr>
+        </table>
+        <input type="reset">
+        </form>
     </div>
 </div>
 </div>
@@ -89,6 +152,8 @@ function w3_close_nav() {
     mySidebar.style.display = "none";
     overlayBg.style.display = "none";
 }
+
+
 </script>
 
 </body>
