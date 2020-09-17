@@ -105,7 +105,7 @@ if (keys.length > 0) {
         var cell_oprettet = row.insertCell(1);
         var cell_sidstspillet = row.insertCell(2);
 
-        cell_navn.innerHTML = "<a href='spil.html' onclick='sessionStorage.current=" + keys[i] + ";'>" + data.navn + "</a>";
+        cell_navn.innerHTML = "<a href='spil.html?key=" + keys[i] + "'>" + data.navn + "</a>";
 
         var d = new Date(data.oprettet);
         cell_oprettet.innerHTML = d.toLocaleDateString() + " " + d.toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"});

@@ -126,6 +126,33 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
         </table>
         <input type="reset">
         </form>
+
+        <table class="w3-table" style="display: block;">
+            <tr>
+                <th>Spiller</th>
+                <th>Point</th>
+            </tr>
+            <tr>
+                <td>Spiller 1</td>
+                <td class="w3-right-align">0</td>
+                <td class="w3-small"></td>
+            </tr>
+            <tr>
+                <td>Spiller 2</td>
+                <td class="w3-right-align">0</td>
+                <td class="w3-small"></td>
+            </tr>
+            <tr>
+                <td>Spiller 3</td>
+                <td class="w3-right-align">0</td>
+                <td class="w3-small"></td>
+            </tr>
+            <tr>
+                <td>Spiller 4</td>
+                <td class="w3-right-align">0</td>
+                <td class="w3-small"></td>
+            </tr>
+        </table>
     </div>
 </div>
 </div>
@@ -154,6 +181,28 @@ function w3_close_nav() {
 }
 
 
+// Load data
+function load() {
+    var url = new URL(window.location.href);
+    var key = url.searchParams.get("key");
+    var data = JSON.parse(localStorage.getItem(key));
+    
+
+    
+    return data;
+}
+
+// Save data
+function save(data) {
+    var url = new URL(window.location.href);
+    var key = url.searchParams.get("key");
+    data.sidst_spillet = new Date();
+    localStorage.setItem(key, JSON.stringify(data));
+}
+
+
+
+var data = load();
 </script>
 
 </body>
