@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<title>WhistPoint.dk | Beregn point når du spiller whist</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-amber.css">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+
+<script src="https://kit.fontawesome.com/bc48570f30.js" crossorigin="anonymous"></script>
+<script src="https://www.w3schools.com/lib/w3.js"></script>
+<script src="script.js"></script>
+
+</head>
+
+<body>
+
+<div w3-include-html="header.html"></div>
+
+<div class="w3-main">
+<div class="w3-row w3-padding-64">
+    <div class="w3-container w3-hide-small w3-col m1 l1"></div>
+    <div class="w3-container w3-col m8 l6" id="spil">
+        <h1 class="w3-xxxlarge"><b>Tidligere spil</b></h1>
+
+        <div class="gamleSpil" id="err">
+            <p>Du har desværre ingen tidligere spil. Øv :(</p>
+            <a class="w3-button w3-round w3-theme" href="nyt.html">Start et nyt spil!</a>
+        </div>
+
+        <table id="tabel" class="gamleSpil w3-table w3-striped w3-hoverable" style="display: none">
+            <tr class='w3-theme'> <th>Navn på spil</th> <th>Oprettet</th> <th>Sidst spillet</th> </tr>
+            <tr w3-repeat="spil">
+                <td><a href="spil.html?key={{key}}">{{navn}}</a></td>
+                <td>{{oprettet}}</td>
+                <td>{{sidst_spillet}}</td>
+            </tr>
+        </table>
+    </div>
+</div>
+</div>
+
+<script>
+w3.includeHTML();
+var spil = {"spil":[
+    {"key":123, "navn":"Spil1", "oprettet":"2022-01-01", "sidst_spillet":"2022-01-02"},
+    {"key":234, "navn":"Spil2", "oprettet":"2022-01-01", "sidst_spillet":"2022-01-02"},
+    {"key":345, "navn":"Spil3", "oprettet":"2022-01-01", "sidst_spillet":"2022-01-02"},
+    {"key":456, "navn":"Spil4", "oprettet":"2022-01-01", "sidst_spillet":"2022-01-02"},
+]};
+w3.displayObject("tabel", spil);
+w3.toggleShow(".gamleSpil");
+
+/*
+// Find alle keys i localStorage.
+var keys = Object.keys(localStorage).sort();
+if (keys.length > 0) {
+    document.getElementById("tabel").style.display = "block";
+    document.getElementById("err").style.display = "none";
+    var table = document.getElementById("tabel");
+    for (i=keys.length - 1; i >= 0; --i) {
+        var data = JSON.parse(localStorage.getItem(keys[i]));
+        var row = table.insertRow(-1);
+        var cell_navn = row.insertCell(0);
+        var cell_oprettet = row.insertCell(1);
+        var cell_sidstspillet = row.insertCell(2);
+
+        cell_navn.innerHTML = "<a href='spil.html?key=" + keys[i] + "'>" + data.navn + "</a>";
+
+        var d = new Date(data.oprettet);
+        cell_oprettet.innerHTML = d.toLocaleDateString() + " " + d.toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"});
+
+        if (data.sidst_spillet) {
+            var d = new Date(typeof(data.sidst_spillet));
+            cell_sidstspillet.innerHTML = d.toLocaleDateString() + " " + d.toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"});
+        } else {
+            // Sidst spillet er null
+            cell_sidstspillet.innerHTML = "-";
+        }
+    }
+}
+*/
+</script>
+
+</body>
+</html>
