@@ -25,7 +25,7 @@
     <div class="w3-container w3-col m8 l6">
         <h1 class="w3-xxxlarge"><b>Nyt spil</b></h1>
 
-        <form>
+        <form action="spil.html" onsubmit="return nyt_spil();">
             <p><label for="spil_navn">Giv spillet et navn: </label><br/>
             <input type="text" id="spil_navn" required></p>
 
@@ -50,11 +50,14 @@
 
             <div style="display:none" id="avanceret">
             <p><label for="grundtakst">Grundtakst: </label>
-                <input type="number" id="grundtakst" name="grundtakst" min=1 value=10 required> </p>
+                <input type="number" id="grundtakst" min=1 value=10 required> </p>
             </div>
-            
 
             <div id="err" class="w3-panel w3-theme-l5 w3-leftbar w3-border-theme" style="display:none"></div>
+
+            <p><input type="submit" value="Start nyt spil!!!" class="w3-button w3-round w3-theme"></p>
+
+            <input type="hidden" id="gameKey" name="id">
         </form>
 
         <p><a class="w3-button w3-round w3-theme" href="spil.html" onclick="return nyt_spil();">Start nyt spil</a></p>

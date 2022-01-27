@@ -1,7 +1,4 @@
 function nyt_spil() {
-    w3.hide("#err");
-
-    var err_str = "";
     var spil = {
         navn: document.getElementById("spil_navn").value.trim(),
         spillere: [
@@ -13,17 +10,12 @@ function nyt_spil() {
         grundtakst: parseInt(document.getElementById("grundtakst").value)
     };
 
+    var err_str = "";
     // Tjekker om spilnavnet er tastet
-    if (spil.navn == "") {
-        err_str += "<p>Indtast et navn til dit spil.</p>";
-    }
-
+    if (spil.navn == "") { err_str += "<p>Indtast et navn til dit spil.</p>"; }
     // Tjekker for om alle spillernavne er unikke.
-    var spillernavne = [spil.spiller1_navn, spil.spiller2_navn, spil.spiller3_navn, spil.spiller4_navn];
-    if ((new Set(spillernavne)).size !== spillernavne.length) {
-        err_str += "<p>Sørg for at alle spillernavne er unikke.</p>";
-    }
-
+    var spillernavne = [spil.spillere[0].spiller, spil.spillere[1].spiller, spil.spillere[2].spiller, spil.spillere[3].spiller];
+    if ((new Set(spillernavne)).size !== spillernavne.length) { err_str += "<p>Sørg for at alle spillernavne er unikke.</p>"; }
     for (var i = 0; i < spillernavne.length; i++) {
         if (spillernavne[i] == "") {
             err_str += "<p>Husk at indtaste navne til alle spillerne.</p>";
@@ -32,13 +24,12 @@ function nyt_spil() {
     }
 
     // Tjek om grundtaksten er mindst 1.
-    if ((Number.isInteger(spil.grundtakst) && spil.grundtakst >= 1) == false) {
-        err_str += "<p>Sørg for at grundtaksten er et helt, positivt tal.</p>"
-    }
+    if ((Number.isInteger(spil.grundtakst) && spil.grundtakst >= 1) == false) { err_str += "<p>Sørg for at grundtaksten er et helt, positivt tal.</p>" }
     
     if (err_str) {
-        document.getElementById("spil.nyt_spil.err").innerHTML = "<h2>Fejl!</h2>" + err_str;
-        w3_open("spil.nyt_spil.err");
+        document.getElementById("err").innerHTML = "<h2>Fejl!</h2>" + err_str;
+        w3.show("#err");
+        return false;
     } else {
         // Der er ingen problemer og man kan starte et spil.
         spil.oprettet = new Date();
@@ -46,7 +37,9 @@ function nyt_spil() {
         spil.key = Date.parse(spil.oprettet);
 
         localStorage.setItem(spil.key, JSON.stringify(spil));
-        start_spil();
+
+        document.getElementById("gameKey").value = spil.key;
+        return true;
     }
 }
 
@@ -55,35 +48,34 @@ function gammelt_spil() {
 
     // Find alle keys i localStorage.
     var keys = Object.keys(localStorage).sort();
-    if (keys.length == 0) {
-        // Ingen tidligere spil.
-        w3_open("spil.gammelt_spil.err");
-        w3_close("spil.gammelt_spil.tabel");
-    } else {
-        w3_open("spil.gammelt_spil.tabel");
-        w3_close("spil.gammelt_spil.err");
-        var table = document.getElementById("spil.gammelt_spil.tabel");
-        for (i=keys.length - 1; i >= 0; --i) {
-            var data = JSON.parse(localStorage.getItem(keys[i]));
-            var row = table.insertRow(-1);
-            var cell_navn = row.insertCell(0);
-            var cell_oprettet = row.insertCell(1);
-            var cell_sidstspillet = row.insertCell(2);
 
-            cell_navn.innerHTML = "<a href='javascript:void(0)' onclick='sessionStorage.current=" + keys[i] + 
-                                    "; start_spil();'>" + data.navn + "</a>";
-
-            var d = new Date(data.oprettet);
-            cell_oprettet.innerHTML = d.toLocaleDateString() + " " + d.toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"});
-
-            if (data.sidst_spillet) {
-                var d = new Date(typeof(data.sidst_spillet));
-                cell_sidstspillet.innerHTML = d.toLocaleDateString() + " " + d.toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"});
-            } else {
-                // Sidst spillet er null
-                cell_sidstspillet.innerHTML = "-";
-            }
+    if (keys.length > 0) {
+        // Der findes spil.
+        w3.hide("#err");
+        var spil = {spil: []};
+        for (var i = 0; i < keys.length; i++) {
+            // Hent hvert spil.
+            var tmp = JSON.parse(localStorage.getItem(keys[i]));
+            spil.spil.push({
+                key: tmp.key,
+                navn: tmp.navn,
+                dateToSort: tmp.sidst_spillet,
+                sidst_spillet: toReadableDateSr(tmp.sidst_spillet)
+            });
         }
+
+        // Sorter arrayet så det nyeste spil er først.
+        const { compare } = Intl.Collator('da-DK');
+        spil.spil.sort((a, b) => compare(a.dateToSort, b.dateToSort));
+        spil.spil.reverse();
+
+        w3.displayObject("tabel", spil);
+        w3.show("#tabel");
+    }
+
+    function toReadableDateSr(dateStr) {
+        var d = new Date(dateStr);
+        return d.toLocaleDateString() + " " + d.toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"});
     }
 }
 
@@ -147,19 +139,6 @@ function gode_sans(id) {
         document.getElementById("spil.start_spil.gode").checked = false;
     }
 }
-/*
-function toggleAvanceret() {
-    var avanceret = document.getElementById("spil.nyt_spil.avanceret");
-    var tekst = document.getElementById("spil.nyt_spil.avanceret_tekst");
-    if (avanceret.className.indexOf("w3-show") == -1) {
-        avanceret.className += " w3-show";
-        tekst.innerHTML = 'Avanceret <i class="fas fa-chevron-up"></i>';
-    } else { 
-        avanceret.className = avanceret.className.replace(" w3-show", "");
-        tekst.innerHTML = 'Avanceret <i class="fas fa-chevron-down"></i>';
-    }
-}
-*/
 
 function vis_div(div_id) {
     var x = document.getElementById("spil").querySelectorAll("div");
@@ -168,38 +147,7 @@ function vis_div(div_id) {
     }
     document.getElementById(div_id).style.display = "block";
 }
-/*
-function w3_open(element_id) {
-    document.getElementById(element_id).style.display = "block";
-}
-   
-function w3_close(element_id) {
-    document.getElementById(element_id).style.display = "none";
-}
 
-// Toggle between showing and hiding the sidebar, and add overlay effect
-function w3_open_nav() {
-    var mySidebar = document.getElementById("mySidebar");
-    var overlayBg = document.getElementById("myOverlay");
-    
-    if (mySidebar.style.display === "block") {
-      mySidebar.style.display = "none";
-      overlayBg.style.display = "none";
-    } else {
-      mySidebar.style.display = "block";
-      overlayBg.style.display = "block";
-    }
-}
-  
-  // Close the sidebar with the close button
-function w3_close_nav() {
-    var mySidebar = document.getElementById("mySidebar");
-    var overlayBg = document.getElementById("myOverlay");
-
-    mySidebar.style.display = "none";
-    overlayBg.style.display = "none";
-}
-*/
 Number.isInteger = Number.isInteger || function(value) {
     // Polyfill til IE
     return typeof value === 'number' && 

@@ -127,7 +127,7 @@ setScore();
 // Load data
 function load() {
     var url = new URL(window.location.href);
-    var key = url.searchParams.get("key");
+    var key = url.searchParams.get("id");
     var data = JSON.parse(localStorage.getItem(key));
     
 

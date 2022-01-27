@@ -31,10 +31,12 @@
         </div>
 
         <table id="tabel" class="gamleSpil w3-table w3-striped w3-hoverable" style="display: none">
-            <tr class='w3-theme'> <th>Navn på spil</th> <th>Oprettet</th> <th>Sidst spillet</th> </tr>
+            <tr class='w3-theme'> 
+                <th>Navn på spil</th> 
+                <th>Sidst spillet</th> 
+            </tr>
             <tr w3-repeat="spil">
                 <td><a href="spil.html?key={{key}}">{{navn}}</a></td>
-                <td>{{oprettet}}</td>
                 <td>{{sidst_spillet}}</td>
             </tr>
         </table>
@@ -44,44 +46,7 @@
 
 <script>
 w3.includeHTML();
-var spil = {"spil":[
-    {"key":123, "navn":"Spil1", "oprettet":"2022-01-01", "sidst_spillet":"2022-01-02"},
-    {"key":234, "navn":"Spil2", "oprettet":"2022-01-01", "sidst_spillet":"2022-01-02"},
-    {"key":345, "navn":"Spil3", "oprettet":"2022-01-01", "sidst_spillet":"2022-01-02"},
-    {"key":456, "navn":"Spil4", "oprettet":"2022-01-01", "sidst_spillet":"2022-01-02"},
-]};
-w3.displayObject("tabel", spil);
-w3.toggleShow(".gamleSpil");
-
-/*
-// Find alle keys i localStorage.
-var keys = Object.keys(localStorage).sort();
-if (keys.length > 0) {
-    document.getElementById("tabel").style.display = "block";
-    document.getElementById("err").style.display = "none";
-    var table = document.getElementById("tabel");
-    for (i=keys.length - 1; i >= 0; --i) {
-        var data = JSON.parse(localStorage.getItem(keys[i]));
-        var row = table.insertRow(-1);
-        var cell_navn = row.insertCell(0);
-        var cell_oprettet = row.insertCell(1);
-        var cell_sidstspillet = row.insertCell(2);
-
-        cell_navn.innerHTML = "<a href='spil.html?key=" + keys[i] + "'>" + data.navn + "</a>";
-
-        var d = new Date(data.oprettet);
-        cell_oprettet.innerHTML = d.toLocaleDateString() + " " + d.toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"});
-
-        if (data.sidst_spillet) {
-            var d = new Date(typeof(data.sidst_spillet));
-            cell_sidstspillet.innerHTML = d.toLocaleDateString() + " " + d.toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"});
-        } else {
-            // Sidst spillet er null
-            cell_sidstspillet.innerHTML = "-";
-        }
-    }
-}
-*/
+gammelt_spil();
 </script>
 
 </body>
