@@ -39,6 +39,18 @@
 
 <script>
 w3.includeHTML();
+
+// Dette skal være noget kode til at tjekke, om ens browser understøtter localStorage.
+// Hvis browseren ikke gør det, skal der komme en boks frem over knapperne, så man ikke kan trykke på dem.
+function start_side() {
+    if (typeof(Storage) == "undefined") {
+        // Ingen localStorage
+        document.getElementById("spil").innerHTML += 
+            "<p>Din browser understøtter ikke localStorage (eller du har blokeret for det). Du skal tillade localStorage for at denne side fungerer.</p>";
+    } else {
+        vis_div("spil.vaelg");
+    }
+}
 </script>
 
 </body>

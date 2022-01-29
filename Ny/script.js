@@ -2,12 +2,14 @@ function nyt_spil() {
     var spil = {
         navn: document.getElementById("spil_navn").value.trim(),
         spillere: [
-            {spiller: document.getElementById("spiller1_navn").value.trim(), point: 0, ændring: ""},
-            {spiller: document.getElementById("spiller2_navn").value.trim(), point: 0, ændring: ""},
-            {spiller: document.getElementById("spiller3_navn").value.trim(), point: 0, ændring: ""},
-            {spiller: document.getElementById("spiller4_navn").value.trim(), point: 0, ændring: ""},
+            {spiller: document.getElementById("spiller1_navn").value.trim(), point: [0], ændring: ""},
+            {spiller: document.getElementById("spiller2_navn").value.trim(), point: [0], ændring: ""},
+            {spiller: document.getElementById("spiller3_navn").value.trim(), point: [0], ændring: ""},
+            {spiller: document.getElementById("spiller4_navn").value.trim(), point: [0], ændring: ""},
         ], 
-        grundtakst: parseInt(document.getElementById("grundtakst").value)
+        grundtakst: parseInt(document.getElementById("grundtakst").value),
+        storslem: 8,
+        sol: 15
     };
 
     var err_str = "";
@@ -75,59 +77,43 @@ function gammelt_spil() {
 
     function toReadableDateSr(dateStr) {
         var d = new Date(dateStr);
-        return d.toLocaleDateString() + " " + d.toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"});
+        return d.toLocaleDateString();// + " " + d.toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"});
     }
 }
 
-function start_spil() {
-    vis_div("spil.start_spil")
-    document.getElementById("tester").style.display = "block";
-
-    var spil = JSON.parse(localStorage.getItem(sessionStorage.current));
-    document.getElementById("spil.start_spil.spilnavn").innerHTML = "<b>" + spil.navn + "</b>";
-}
-
-function melding() {
-    var melding = document.getElementById("spil.start_spil.melding");
-    var tillaeg = document.getElementById("spil.start_spil.tillæg");
-
-    
-
+function tjekMelding() {
+    var melding = document.getElementById("melding");
+    var tillaeg = document.getElementById("tillæg");
+    var tomTillaeg = document.createElement("option");
 
     if (melding.value == parseInt(melding.value)) {
         // Der er tale om en tal-melding.
         tillaeg.disabled = false;
+        if (tillaeg.value == "") tillaeg.remove(0);
 
         if (tillaeg.value == "Vip") {
-            document.getElementById("spil.start_spil.tillæg.vip.tr").style.visibility = "visible";
+            document.getElementById("tillæg.vip.tr").style.visibility = "visible";
         } else {
-            document.getElementById("spil.start_spil.tillæg.vip.tr").style.visibility = "collapse";
+            document.getElementById("tillæg.vip.tr").style.visibility = "collapse";
         }
 
         if (tillaeg.value == "Halve" || tillaeg.value == "Vip") {
-            document.getElementById("spil.start_spil.tillæg.sans.td").style.visibility = "visible";
-            document.getElementById("spil.start_spil.tillæg.gode.td").style.visibility = "visible";
+            document.getElementById("tillæg.sans.td").style.visibility = "visible";
+            document.getElementById("tillæg.gode.td").style.visibility = "visible";
         } else {
-            document.getElementById("spil.start_spil.tillæg.sans.td").style.visibility = "collapse";
-            document.getElementById("spil.start_spil.tillæg.gode.td").style.visibility = "collapse";
+            document.getElementById("tillæg.sans.td").style.visibility = "collapse";
+            document.getElementById("tillæg.gode.td").style.visibility = "collapse";
         }
 
     } else {
         // Find ud af, hvilken af de andre meldinger der er tale om.
         tillaeg.disabled = true;
-        document.getElementById("spil.start_spil.tillæg.sans.td").style.visibility = "collapse";
-        document.getElementById("spil.start_spil.tillæg.gode.td").style.visibility = "collapse";
-        document.getElementById("spil.start_spil.tillæg.vip.tr").style.visibility = "collapse";
-    }
-}
+        tillaeg.add(tomTillaeg, 0);
+        tillaeg.selectedIndex = 0;
 
-function start_side() {
-    if (typeof(Storage) == "undefined") {
-        // Ingen localStorage
-        document.getElementById("spil").innerHTML += 
-            "<p>Din browser understøtter ikke localStorage (eller du har blokeret for det). Du skal tillade localStorage for at denne side fungerer.</p>";
-    } else {
-        vis_div("spil.vaelg");
+        document.getElementById("tillæg.sans.td").style.visibility = "collapse";
+        document.getElementById("tillæg.gode.td").style.visibility = "collapse";
+        document.getElementById("tillæg.vip.tr").style.visibility = "collapse";
     }
 }
 
@@ -140,12 +126,60 @@ function gode_sans(id) {
     }
 }
 
-function vis_div(div_id) {
-    var x = document.getElementById("spil").querySelectorAll("div");
-    for (var i = 0; i < x.length; i++) {
-        x[i].style.display = "none";
+function udregnPoint(data) {
+    var melding = document.getElementById("melding").value;
+    var tillaeg = document.getElementById("tillæg").value;
+    var gode = document.getElementById("tillæg.gode").checked;
+    var sans = document.getElementById("tillæg.sans").checked;
+
+    var antalStik = parseInt(document.getElementById("antalStik").value);
+
+    var takst = data.grundtakst;
+    var sol = takst * data.sol;
+    var storslem = takst * data.storslem;
+
+    if (melding == parseInt(melding)) {
+        // Der er tale om en tal-melding.
+        melding = parseInt(melding);
+        // Taksten fordobles for hver melding over 7.
+        takst *= Math.pow(2, melding-7);
+
+        // Taksten fordobles hvis der er meldt gode eller sans.
+        if (tillaeg == "Gode" || tillaeg == "Sans") takst *= 2;
+        // Den fordobles hvis der meldes halve og fordobles igen hvis der er tale om enten gode eller sans (kun en af dem kan gælde).
+        else if (tillaeg == "Halve") takst *= Math.pow(2, 1 + gode + sans);
+        // Den fordobles også for hver gang der vippes, samt hvis der er tale om gode eller sans.
+        else if (tillaeg == "Vip") {
+            takst *= Math.pow(2, 1 + gode + sans);
+            if (document.getElementById("tillæg.vip.2").checked) takst *= 2;
+            else if (document.getElementById("tillæg.vip.3").checked) takst *= 4;
+        }
+
+        if (antalStik >= melding) {
+            // For hvert stik over meldingen får man taksten.
+            takst *= antalStik - melding + 1;
+        } else {
+            // Taksten fordobles hvis man ikke opnår meldingen.
+            takst *= 2;
+            // For hvert stik under meldingen mister man taksten.
+            takst *= antalStik - melding;
+        }
+
+        if (antalStik == 12 || antalStik == 1) takst += storslem/2;
+        else if (antalStik == 13 || antalStik == 0) takst += storslem;
+
+        console.log(takst);
+        
+
+    } else if (melding == "Sol") {
+        takst = sol;
+    } else if (melding = "Ren sol") {
+        takst = sol * 2;
+    } else if (melding = "Bordlægger"){
+        takst = sol * 4;
     }
-    document.getElementById(div_id).style.display = "block";
+
+    return false;
 }
 
 Number.isInteger = Number.isInteger || function(value) {

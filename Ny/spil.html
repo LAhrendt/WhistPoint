@@ -25,75 +25,63 @@
     <div class="w3-container w3-col m8 l6">
         <h1 class="w3-xxxlarge" id="spilnavn"><b>Spil</b></h1>
 
-        <form id="input">
+        <form id="input" onsubmit="return udregnPoint(data);">
         <table class="w3-table" style="display: block;" id="tester">
             <tr>
-            <td style="padding-left: 0;"> Melding: </td>
+            <td style="padding-left: 0; vertical-align: middle;"> Melding: </td>
             <td>
-                <select id="melding" onchange="melding()" style="width: 100%;">
-                <option selected disabled></option>
-                <option>7</option>
-                <option>8</option>
-                <option>9</option>
-                <option>Sol</option>
-                <option>10</option>
-                <option>Ren sol</option>
-                <option>11</option>
-                <option>Bordlægger</option>
-                <option>12</option>
-                <option>13</option>
+                <select id="melding" onchange="tjekMelding()" style="width: 100%;" class="w3-select" required>
+                    <option selected disabled></option>
+                    <option w3-repeat="meldinger">{{name}}</option>
                 </select>
             </td>
             </tr>
             <tr>
-            <td style="padding-left: 0;"> Tillæg: </td>
+            <td style="padding-left: 0; vertical-align: middle;"> Tillæg: </td>
             <td>
-                <select id="tillæg" onchange="melding()" style="width: 100%;">
-                <option selected>Ren</option>
-                <option>Halve</option>
-                <option>Gode</option>
-                <option>Sans</option>
-                <option>Vip</option>
+                <select id="tillæg" onchange="tjekMelding();" style="width: 100%;" class="w3-select" disabled>
+                    <option selected></option>
+                    <option w3-repeat="tillæg">{{name}}</option>
                 </select>
             </td>
             <td id="tillæg.sans.td" style="visibility: collapse;">
-                <label> <input type="checkbox" id="tillæg.sans"> Sans </label>
+                <label> <input type="checkbox" class="w3-check" id="tillæg.sans"> Sans </label>
             </td>
             <td id="tillæg.gode.td" style="visibility: collapse;">
-                <label> <input type="checkbox" id="tillæg.gode"> Gode </label>
+                <label> <input type="checkbox" class="w3-check" id="tillæg.gode"> Gode </label>
             </td>
             </tr>
-            <tr style="visibility: collapse;" id="tillæg.vip.tr">
+            <tr id="tillæg.vip.tr" style="visibility: collapse;">
             <td colspan="4">
-                <label> <input type="radio" id="tillæg.vip.1" name="vip" checked> 1. vip </label> 
-                <label> <input type="radio" id="tillæg.vip.2" name="vip"> 2. vip </label> 
-                <label> <input type="radio" id="tillæg.vip.3" name="vip"> 3. vip </label>
+                <label> <input type="radio" class="w3-radio" id="tillæg.vip.1" name="tillæg.vip" value=1 checked> 1. vip </label>
+                <label> <input type="radio" class="w3-radio" id="tillæg.vip.2" name="tillæg.vip" value=2> 2. vip </label>
+                <label> <input type="radio" class="w3-radio" id="tillæg.vip.3" name="tillæg.vip" value=3> 3. vip </label>
             </td>
             </tr>
             <tr>
-            <td style="padding-left: 0;"> Antal stik: </td>
+            <td style="padding-left: 0; vertical-align: middle;"> Antal stik: </td>
             <td>
-                <select style="width: 100%;">
-                <option selected disabled></option>
-                <option>0</option>
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-                <option>6</option>
-                <option>7</option>
-                <option>8</option>
-                <option>9</option>
-                <option>10</option>
-                <option>11</option>
-                <option>12</option>
-                <option>13</option>
+                <select id="antalStik" style="width: 100%;" class="w3-select" required>
+                    <option selected disabled></option>
+                    <option>0</option>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                    <option>7</option>
+                    <option>8</option>
+                    <option>9</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
                 </select>
             </td>
             </tr>
         </table>
-        <input type="reset">
+        <input type="submit" class="w3-button w3-round w3-theme" value="Beregn">
         </form>
 
         <table class="w3-table" id="stilling" style="display: block;">
@@ -114,6 +102,11 @@
 <script>
 w3.includeHTML();
 
+w3.getHttpObject("whistdata.json", function(dataObj) {
+    w3.displayObject("melding", dataObj);
+    w3.displayObject("tillæg", dataObj);
+})
+
 function setScore(data) {
     var stilling = {"stilling": [
         {"spiller":"Spiller 1", "point":10, "ændring":"+10"}
@@ -130,20 +123,14 @@ function load() {
     var key = url.searchParams.get("id");
     var data = JSON.parse(localStorage.getItem(key));
     
-
-    
     return data;
 }
 
 // Save data
 function save(data) {
-    var url = new URL(window.location.href);
-    var key = url.searchParams.get("key");
     data.sidst_spillet = new Date();
-    localStorage.setItem(key, JSON.stringify(data));
+    localStorage.setItem(data.key, JSON.stringify(data));
 }
-
-
 
 var data = load();
 </script>
