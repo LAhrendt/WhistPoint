@@ -82,19 +82,24 @@
             </tr>
         </table>
         <input type="submit" class="w3-button w3-round w3-theme" value="Beregn">
-        </form>
 
         <table class="w3-table" id="stilling" style="display: block;">
             <tr>
+                <th></th>
                 <th>Spiller</th>
                 <th>Point</th>
             </tr>
             <tr w3-repeat="stilling">
+                <td><input class="w3-check" type="checkbox"></td>
                 <td>{{spiller}}</td>
                 <td class="w3-right-align">{{point}}</td>
-                <td class="w3-small">{{ændring}}</td>
+                <td class="w3-small">{{deltaPoint}}</td>
             </tr>
         </table>
+
+        </form>
+
+        
     </div>
 </div>
 </div>
@@ -108,13 +113,28 @@ w3.getHttpObject("whistdata.json", function(dataObj) {
 })
 
 function setScore(data) {
-    var stilling = {"stilling": [
-        {"spiller":"Spiller 1", "point":10, "ændring":"+10"}
-    ]};
+    var stilling = {stilling: []};
+
+    for (var i = 0; i < data.spillere.length; i++){
+        let spiller = data.spillere[i];
+
+        let tmp = {spiller: spiller.spiller};
+        tmp.point = spiller.point[spiller.point.length - 1];
+        tmp.deltaPoint = "";
+
+        if (spiller.point.length > 1) {
+            tmp.deltaPoint = tmp.point - spiller.point[spiller.point.length - 2]
+        }
+        stilling.stilling[i] = tmp;
+    }
+
     w3.displayObject("stilling", stilling);
 }
 
-setScore();
+
+
+var data = load();
+setScore(data);
 
 
 // Load data

@@ -28,6 +28,11 @@
         <p>Opret et nyt spil herunder eller find et gammelt.</p>
         <p>Vi gemmer dine spil direkte i din browser, intet bliver overført til en server.</p>
 
+        <div class="w3-panel w3-pale-red w3-leftbar w3-border-red" id="ikke-localstorage">
+            <h3>Advarsel!</h3>
+            <p>Din browser understøtter ikke localStorage (eller du har blokeret for det). Du skal tillade localStorage for at denne side fungerer.</p>
+        </div>
+
         <div>
             <a class="w3-button w3-round w3-theme" href="nyt.html">Nyt spil</a>
             <p>eller</p>
@@ -40,17 +45,9 @@
 <script>
 w3.includeHTML();
 
-// Dette skal være noget kode til at tjekke, om ens browser understøtter localStorage.
-// Hvis browseren ikke gør det, skal der komme en boks frem over knapperne, så man ikke kan trykke på dem.
-function start_side() {
-    if (typeof(Storage) == "undefined") {
-        // Ingen localStorage
-        document.getElementById("spil").innerHTML += 
-            "<p>Din browser understøtter ikke localStorage (eller du har blokeret for det). Du skal tillade localStorage for at denne side fungerer.</p>";
-    } else {
-        vis_div("spil.vaelg");
-    }
-}
+// Tjek om browseren understøtter localStorage.
+if (typeof(Storage) != "undefined") { w3.hide("#ikke-localstorage"); }
+
 </script>
 
 </body>
