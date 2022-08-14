@@ -12,6 +12,7 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="/scripts/script.js"></script>
+<script src="/scripts/nyt.js"></script>
 
 </head>
 
@@ -45,22 +46,52 @@
 <div class="w3-row w3-padding-64">
     <div class="w3-container w3-hide-small w3-col m1 l1"></div>
     <div class="w3-container w3-col m8 l6">
-        <h1 class="w3-xxxlarge">WhistPoint.dk</h1>
-
-        <p>Her hjælper vi dig med at holde styr på pointene i dit spil whist.</p>
-        <p>Opret et nyt spil herunder eller find et tidligere.</p>
-        <p>Vi gemmer dine spil direkte i din browser, intet bliver overført til en server.</p>
-
         <div class="w3-panel w3-pale-red w3-leftbar w3-border-red" id="ikke-localstorage" style="display:none;">
             <h3>Advarsel!</h3>
             <p>Din browser understøtter ikke localStorage (eller du har blokeret for det). Du skal tillade localStorage for at denne side fungerer.</p>
         </div>
 
-        <div>
-            <a class="w3-button w3-round w3-theme" href="/spil/nyt/">Nyt spil</a>
-            <p>eller</p>
-            <a class="w3-button w3-round w3-theme" href="/spil/tidligere/">Find tidligere spil</a>
-        </div>
+        <h1 class="w3-xxxlarge"><b>Nyt spil</b></h1>
+
+        <form id="nytspilform" action="spil.html">
+            <p><label for="spil_navn">Giv spillet et navn: </label><br/>
+            <input type="text" id="spil_navn" required></p>
+
+            <p>Indtast spillernes navne:<br/>
+            <label for="spiller1_navn" class="hidden">Navn på spiller 1</label>
+            <input type="text" id="spiller1_navn" placeholder="Spiller 1" required> </p>
+            
+            <p>
+            <label for="spiller2_navn" class="hidden">Navn på spiller 2</label>
+            <input type="text" id="spiller2_navn" placeholder="Spiller 2" required> </p>
+
+            <p>
+            <label for="spiller3_navn" class="hidden">Navn på spiller 3</label>
+            <input type="text" id="spiller3_navn" placeholder="Spiller 3" required> </p>
+
+            <p>
+            <label for="spiller4_navn" class="hidden">Navn på spiller 4</label>
+            <input type="text" id="spiller4_navn" placeholder="Spiller 4" required> </p>
+            
+            
+            <a id="toggleAdvanced" class="w3-button">Avanceret <i class="material-icons">unfold_more</i></a>
+
+            <div id="avanceret" style="display:none">
+            <p><label for="grundtakst">Grundtakst: </label>
+                <input type="number" id="grundtakst" min=1 value=10 required> </p>
+            <p><label for="soltakst">Takst for sol: </label>
+                <input type="number" id="soltakst" min=1 value=15 required> </p>
+            <p><label for="storslemtakst">Takst for storslem: </label>
+                    <input type="number" id="storslemtakst" min=1 value=8 required> </p>
+            </div>
+
+            <div id="err" class="w3-panel w3-theme-l5 w3-leftbar w3-border-theme" style="display:none"></div>
+
+            <p><input type="submit" value="Start nyt spil" class="w3-button w3-round w3-theme"></p>
+
+            <input type="hidden" id="gameKey" name="id">
+        </form>
+
     </div>
 </div>
 </div>

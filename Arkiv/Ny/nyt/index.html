@@ -7,25 +7,48 @@
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-amber.css">
 <link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
 
 <script src="https://kit.fontawesome.com/bc48570f30.js" crossorigin="anonymous"></script>
-<script src="https://www.w3schools.com/lib/w3.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="script.js"></script>
 
 </head>
 
 <body>
 
-<div w3-include-html="header.html"></div>
+<!-- Navbar -->
+<div class="w3-top">
+    <div class="w3-bar w3-theme w3-top w3-left-align w3-large">
+        <a id="openMenu" class="w3-bar-item w3-right w3-hide-large w3-hide-medium w3-hover-white w3-large w3-theme-l1"><i class="fas fa-bars"></i></a>
+        <a href="/" class="w3-bar-item w3-button w3-theme-l1">WhistPoint.dk</a>
+        <a href="om-whist.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Hvad er whist?</a>
+        <a href="om.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Om</a>
+    </div>
+</div>
 
+<!-- Sidebar -->
+<nav class="nav w3-sidebar w3-bar-block w3-hide-large w3-large w3-theme-l5 w3-animate-right" style="right: 0; display: none;">
+    <a id="closeMenu" class="w3-right w3-xlarge w3-padding-large w3-hover-black" title="Luk menu">
+        <i class="fas fa-times"></i>
+    </a>
+    <h4 class="w3-bar-item"><b>Menu</b></h4>
+    <a class="w3-bar-item w3-button w3-hover-black" href="/">WhistPoint.dk</a>
+    <a class="w3-bar-item w3-button w3-hover-black" href="om-whist.html">Hvad er whist?</a>
+    <a class="w3-bar-item w3-button w3-hover-black" href="om.html">Om</a>
+</nav>
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div id="openMenu" class="nav w3-overlay w3-hide-large"></div>
+
+
+<!-- Content -->
 <div class="w3-main">
 <div class="w3-row w3-padding-64">
     <div class="w3-container w3-hide-small w3-col m1 l1"></div>
     <div class="w3-container w3-col m8 l6">
         <h1 class="w3-xxxlarge"><b>Nyt spil</b></h1>
 
-        <form action="spil.html" onsubmit="return nyt_spil();">
+        <form id="nytspilform" action="/spil">
             <p><label for="spil_navn">Giv spillet et navn: </label><br/>
             <input type="text" id="spil_navn" required></p>
 
@@ -46,9 +69,9 @@
             <input type="text" id="spiller4_navn" placeholder="Spiller 4" required> </p>
             
             
-            <a class="w3-button" href="javascript:void(0)" onclick="w3.toggleShow('#avanceret')">Avanceret <i class="fas fa-chevron-down"></i></a>
+            <a id="toggleAdvanced" class="w3-button">Avanceret <i class="fas fa-chevron-down"></i></a>
 
-            <div style="display:none" id="avanceret">
+            <div id="avanceret" style="display:none">
             <p><label for="grundtakst">Grundtakst: </label>
                 <input type="number" id="grundtakst" min=1 value=10 required> </p>
             </div>
@@ -63,10 +86,6 @@
     </div>
 </div>
 </div>
-
-<script>
-w3.includeHTML();
-</script>
 
 </body>
 </html>

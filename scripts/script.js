@@ -1,85 +1,12 @@
-function nyt_spil() {
-    var spil = {
-        navn: document.getElementById("spil_navn").value.trim(),
-        spillere: [
-            {spiller: document.getElementById("spiller1_navn").value.trim(), point: [0], ændring: ""},
-            {spiller: document.getElementById("spiller2_navn").value.trim(), point: [0], ændring: ""},
-            {spiller: document.getElementById("spiller3_navn").value.trim(), point: [0], ændring: ""},
-            {spiller: document.getElementById("spiller4_navn").value.trim(), point: [0], ændring: ""},
-        ], 
-        grundtakst: parseInt(document.getElementById("grundtakst").value),
-        storslem: 8,
-        sol: 15
-    };
+$(document).ready(function(){
+    // Til boks på forsiden
+    if (typeof(Storage) == "undefined") { $("#ikke-localstorage").show(); }
 
-    var err_str = "";
-    // Tjekker om spilnavnet er tastet
-    if (spil.navn == "") { err_str += "<p>Indtast et navn til dit spil.</p>"; }
-    // Tjekker for om alle spillernavne er unikke.
-    var spillernavne = [spil.spillere[0].spiller, spil.spillere[1].spiller, spil.spillere[2].spiller, spil.spillere[3].spiller];
-    if ((new Set(spillernavne)).size !== spillernavne.length) { err_str += "<p>Sørg for at alle spillernavne er unikke.</p>"; }
-    for (var i = 0; i < spillernavne.length; i++) {
-        if (spillernavne[i] == "") {
-            err_str += "<p>Husk at indtaste navne til alle spillerne.</p>";
-            break;
-        }
-    }
+    // Header
+    $("#openMenu").click(function(){ $(".nav").show(); });
+    $("#closeMenu").click(function(){ $(".nav").hide(); });
+});
 
-    // Tjek om grundtaksten er mindst 1.
-    if ((Number.isInteger(spil.grundtakst) && spil.grundtakst >= 1) == false) { err_str += "<p>Sørg for at grundtaksten er et helt, positivt tal.</p>" }
-    
-    if (err_str) {
-        document.getElementById("err").innerHTML = "<h2>Fejl!</h2>" + err_str;
-        w3.show("#err");
-        return false;
-    } else {
-        // Der er ingen problemer og man kan starte et spil.
-        spil.oprettet = new Date();
-        spil.sidst_spillet = spil.oprettet;
-        spil.key = Date.parse(spil.oprettet);
-
-        localStorage.setItem(spil.key, JSON.stringify(spil));
-
-        document.getElementById("gameKey").value = spil.key;
-        return true;
-    }
-}
-
-function gammelt_spil() {
-    // Find tidligere spil.
-
-    // Find alle keys i localStorage.
-    var keys = Object.keys(localStorage).sort();
-
-    if (keys.length > 0) {
-        // Der findes spil.
-        w3.hide("#err");
-        var spil = {spil: []};
-        for (var i = 0; i < keys.length; i++) {
-            // Hent hvert spil.
-            var tmp = JSON.parse(localStorage.getItem(keys[i]));
-            spil.spil.push({
-                key: tmp.key,
-                navn: tmp.navn,
-                dateToSort: tmp.sidst_spillet,
-                sidst_spillet: toReadableDateSr(tmp.sidst_spillet)
-            });
-        }
-
-        // Sorter arrayet så det nyeste spil er først.
-        const { compare } = Intl.Collator('da-DK');
-        spil.spil.sort((a, b) => compare(a.dateToSort, b.dateToSort));
-        spil.spil.reverse();
-
-        w3.displayObject("tabel", spil);
-        w3.show("#tabel");
-    }
-
-    function toReadableDateSr(dateStr) {
-        var d = new Date(dateStr);
-        return d.toLocaleDateString();// + " " + d.toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"});
-    }
-}
 
 function tjekMelding() {
     var melding = document.getElementById("melding");

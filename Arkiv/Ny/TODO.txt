@@ -1,0 +1,9 @@
+Der skal laves tjekbokse for hver spiller til at markere melder og makker.
+
+Man skal kunne tilskrive point.
+
+Der skal laves en boks til at kunne skrive fejlbeskeder under spillet.
+
+Hvis man vælger halve, skal man også kunne vælge at vippe. Tilføj tjekboks til højre for gode og sans, hvis man vælger den skal de tre muligheder for vip vises.
+
+Der skal laves tjekbokse til at markere om man gik hjem i i en sol.

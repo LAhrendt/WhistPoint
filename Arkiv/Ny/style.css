@@ -1,0 +1,9 @@
+html,body,h1,h2,h3,h4,h5,h6 {font-family: "Verdana", sans-serif;}
+.w3-sidebar {
+    z-index: 3;
+    width: 250px;
+    top: 43px;
+    bottom: 0;
+    height: inherit;
+}
+.hidden {position:absolute; left:-10000px; top:auto; width:1px; height:1px; overflow:hidden;}
