@@ -12,36 +12,45 @@ $(document).ready(function(){
     $(".tjekMelding").change(function(){
         var melding = $("#melding");
         var tillaeg = $("#tillæg");
-        var tomTillaeg = document.createElement("option");
+        //var tomTillaeg = document.createElement("option");
 
         if (melding.val() == parseInt(melding.val())) {
             // Der er tale om en tal-melding.
-            tillaeg.removeAttr("disabled");
+            tillaeg.prop("disabled", false);
             if (tillaeg.val() == "")  tillaeg.remove(0);
 
-            if (tillaeg.value == "Vip") {
-                document.getElementById("tillæg.vip.tr").style.visibility = "visible";
+            if (tillaeg.val() == "Vip") {
+                $("#tillæg.vip.tr").show();
+                //document.getElementById("tillæg.vip.tr").style.visibility = "visible";
             } else {
-                document.getElementById("tillæg.vip.tr").style.visibility = "collapse";
+                $("#tillæg.vip.tr").hide();
+                //document.getElementById("tillæg.vip.tr").style.visibility = "collapse";
             }
 
-            if (tillaeg.value == "Halve" || tillaeg.value == "Vip") {
-                document.getElementById("tillæg.sans.td").style.visibility = "visible";
-                document.getElementById("tillæg.gode.td").style.visibility = "visible";
+            if (tillaeg.val() == "Halve" || tillaeg.val() == "Vip") {
+                $("#tillæg.sans.td").show();
+                $("#tillæg.gode.td").show();
+                //document.getElementById("tillæg.sans.td").style.visibility = "visible";
+                //document.getElementById("tillæg.gode.td").style.visibility = "visible";
             } else {
-                document.getElementById("tillæg.sans.td").style.visibility = "collapse";
-                document.getElementById("tillæg.gode.td").style.visibility = "collapse";
+                $("#tillæg.sans.td").hide();
+                $("#tillæg.gode.td").hide();
+                //document.getElementById("tillæg.sans.td").style.visibility = "collapse";
+                //document.getElementById("tillæg.gode.td").style.visibility = "collapse";
             }
 
         } else {
             // Find ud af, hvilken af de andre meldinger der er tale om.
-            tillaeg.disabled = true;
-            tillaeg.add(tomTillaeg, 0);
+            tillaeg.prop("disabled", true);
+            tillaeg.add(document.createElement("option"), 0);
             tillaeg.selectedIndex = 0;
 
-            document.getElementById("tillæg.sans.td").style.visibility = "collapse";
-            document.getElementById("tillæg.gode.td").style.visibility = "collapse";
-            document.getElementById("tillæg.vip.tr").style.visibility = "collapse";
+            $("#tillæg.sans.td").hide();
+            $("#tillæg.gode.td").hide();
+            $("#tillæg.vip.tr").hide();
+            //document.getElementById("tillæg.sans.td").style.visibility = "collapse";
+            //document.getElementById("tillæg.gode.td").style.visibility = "collapse";
+            //document.getElementById("tillæg.vip.tr").style.visibility = "collapse";
         }
     });
 });
